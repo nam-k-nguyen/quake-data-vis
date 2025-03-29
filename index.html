@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Interactive map with Leaflet</title>
+    <link rel="icon" href="data:;base64,iVBORwOKGO=" />
+    <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <section id="map-section">
+        <div id="map"></div>
+    </section>
+    <section id="control-section">
+        <button id="control-toggler">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
+                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
+            </svg>
+        </button>
+        <div>
+            <div>Map background</div>
+            <div>Color by</div>
+
+        </div>
+    </section>
+
+
+    <!-- Library -->
+    <script src="js/d3.v6.min.js"></script>
+    <script src="js/leaflet.js"></script>
+
+
+    <!-- Code -->
+    <script src="js/main.js"></script>
+    <script src="js/mapSkins.js"></script>
+    <script src="js/leafletMap.js"></script>
+    <script src="js/controlSection.js"></script>
+
+
+    <div id="tooltip"></div>
+
+
+</body>
+
+</html>

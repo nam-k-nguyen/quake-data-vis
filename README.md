@@ -1,1 +1,1 @@
-# quake-data-vis
+# Interactive Map with Leaflet
