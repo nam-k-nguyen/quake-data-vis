@@ -1,46 +1,148 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <title>Interactive map with Leaflet</title>
-    <link rel="icon" href="data:;base64,iVBORwOKGO=" />
-    <link rel="stylesheet" href="css/leaflet.css">
-    <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Earthquake Visualization</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <!-- External CSS -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- D3.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <!-- Leaflet JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <!-- PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
-
 <body>
-    <section id="map-section">
-        <div id="map"></div>
-    </section>
-    <section id="control-section">
-        <button id="control-toggler">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left-fill" viewBox="0 0 16 16">
-                <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z" />
-            </svg>
-        </button>
-        <div>
-            <div>Map background</div>
-            <div>Color by</div>
-
-        </div>
-    </section>
-
-
-    <!-- Library -->
-    <script src="js/d3.v6.min.js"></script>
-    <script src="js/leaflet.js"></script>
-
-
-    <!-- Code -->
-    <script src="js/main.js"></script>
-    <script src="js/mapSkins.js"></script>
-    <script src="js/leafletMap.js"></script>
-    <script src="js/controlSection.js"></script>
-
-
-    <div id="tooltip"></div>
-
-
+    <div class="loading">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <div class="container">
+        <header class="header">
+            <h1>Global Earthquake Visualization (2014-2025)</h1>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="control-group">
+                <h3>Data Loading</h3>
+                <p id="data-stats">Loading data...</p>
+            </div>
+            
+            <div class="control-group">
+                <h3>Map Options</h3>
+                <div>
+                    <label for="map-background">Map Background:</label>
+                    <select id="map-background">
+                        <option value="OpenStreetMap">OpenStreetMap</option>
+                        <option value="Esri.WorldImagery">Satellite</option>
+                        <option value="CartoDB.DarkMatter">Dark</option>
+                        <option value="CartoDB.Positron">Light</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="color-by">Color By:</label>
+                    <select id="color-by">
+                        <option value="magnitude">Magnitude</option>
+                        <option value="depth">Depth</option>
+                        <option value="year">Year</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="checkbox" id="size-by-magnitude" checked>
+                    <label for="size-by-magnitude">Size by Magnitude</label>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <h3>Filter Options</h3>
+                <div>
+                    <label for="magnitude-min">Magnitude:</label>
+                    <input type="range" id="magnitude-min" min="3" max="8" value="3" step="0.1">
+                    <span id="magnitude-value">3.0+</span>
+                </div>
+                <div>
+                    <label for="depth-min">Depth (km):</label>
+                    <input type="range" id="depth-min" min="0" max="700" value="0" step="10">
+                    <span id="depth-value">0+</span>
+                </div>
+                <div>
+                    <label for="year-range">Year Range:</label>
+                    <select id="year-min">
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                    </select>
+                    to
+                    <select id="year-max">
+                        <option value="2014">2014</option>
+                        <option value="2015">2015</option>
+                        <option value="2016">2016</option>
+                        <option value="2017">2017</option>
+                        <option value="2018">2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025" selected>2025</option>
+                    </select>
+                </div>
+                <button id="reset-filters">Reset Filters</button>
+            </div>
+            
+            <div class="control-group">
+                <h3>Animation</h3>
+                <button id="play-animation">▶ Play Earthquake Timeline</button>
+                <div>
+                    <label for="animation-speed">Speed:</label>
+                    <input type="range" id="animation-speed" min="1" max="100" value="50">
+                </div>
+            </div>
+        </aside>
+        
+        <main class="main">
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+            
+            <div class="visualization-section">
+                <h3>Earthquakes Over Time</h3>
+                <div id="timeline" class="timeline-container"></div>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between;">
+                <div class="visualization-section" style="flex: 1; margin-right: 5px;">
+                    <h3>Earthquakes by Magnitude</h3>
+                    <div id="magnitude-chart" style="height: 200px;"></div>
+                </div>
+                <div class="visualization-section" style="flex: 1; margin-left: 5px;">
+                    <h3>Earthquakes by Depth</h3>
+                    <div id="depth-chart" style="height: 200px;"></div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>Data Source: <a href="https://earthquake.usgs.gov/earthquakes/search/" target="_blank" style="color: white;">US Geological Survey</a> | Last Updated: March 2025</p>
+        </footer>
+    </div>
+    
+    <div class="tooltip" id="tooltip"></div>
+    
+    <!-- Main JavaScript file -->
+    <script src="app.js"></script>
 </body>
-
 </html>
