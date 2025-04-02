@@ -368,7 +368,6 @@ function initTimelineChart() {
     // Set up scales
     const x = d3.scaleTime()
         .domain(d3.extent(allEarthquakes, d => {
-            console.log("hi", d.date.getMonth())
             return d.date
         }))
         .range([0, width]);
