@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,22 +16,23 @@
     <!-- PapaParse for CSV parsing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 </head>
+
 <body>
     <div class="loading">
         <div class="loading-spinner"></div>
     </div>
-    
+
     <div class="container">
         <header class="header">
-            <h1>Global Earthquake Visualization (2014-2025)</h1>
+            <h4>Global Earthquake Visualization (2014-2025)</h4>
         </header>
-        
+
         <aside class="sidebar">
             <div class="control-group">
                 <h3>Data Loading</h3>
                 <p id="data-stats">Loading data...</p>
             </div>
-            
+
             <div class="control-group">
                 <h3>Map Options</h3>
                 <div>
@@ -55,7 +57,7 @@
                     <label for="size-by-magnitude">Size by Magnitude</label>
                 </div>
             </div>
-            
+
             <div class="control-group">
                 <h3>Filter Options</h3>
                 <div>
@@ -102,7 +104,7 @@
                 </div>
                 <button id="reset-filters">Reset Filters</button>
             </div>
-            
+
             <div class="control-group">
                 <h3>Animation</h3>
                 <button id="play-animation">▶ Play Earthquake Timeline</button>
@@ -112,37 +114,46 @@
                 </div>
             </div>
         </aside>
-        
+
         <main class="main">
             <div class="map-container">
                 <div id="map"></div>
             </div>
-            
-            <div class="visualization-section">
-                <h3>Earthquakes Over Time</h3>
-                <div id="timeline" class="timeline-container"></div>
-            </div>
-            
-            <div style="display: flex; justify-content: space-between;">
-                <div class="visualization-section" style="flex: 1; margin-right: 5px;">
-                    <h3>Earthquakes by Magnitude</h3>
-                    <div id="magnitude-chart" style="height: 200px;"></div>
+
+            <div id="toggleable" class="on">
+                <button id="toggle-charts-button">
+                    <div class="toggle-charts-icon">▼</div>
+                    Toggle Charts 
+                    <div class="toggle-charts-icon">▼</div>
+                </button>
+                <div class="visualization-section">
+                    <h3>Earthquakes Over Time</h3>
+                    <div id="timeline" class="timeline-container"></div>
                 </div>
-                <div class="visualization-section" style="flex: 1; margin-left: 5px;">
-                    <h3>Earthquakes by Depth</h3>
-                    <div id="depth-chart" style="height: 200px;"></div>
+
+                <div style="display: flex; justify-content: space-between;">
+                    <div class="visualization-section" style="flex: 1;">
+                        <h3>Earthquakes by Magnitude</h3>
+                        <div id="magnitude-chart" style="height: 100px;"></div>
+                    </div>
+                    <div class="visualization-section" style="flex: 1;">
+                        <h3>Earthquakes by Depth</h3>
+                        <div id="depth-chart" style="height: 100px;"></div>
+                    </div>
                 </div>
             </div>
+
         </main>
-        
+
         <footer class="footer">
             <p>Data Source: <a href="https://earthquake.usgs.gov/earthquakes/search/" target="_blank" style="color: white;">US Geological Survey</a> | Last Updated: March 2025</p>
         </footer>
     </div>
-    
+
     <div class="tooltip" id="tooltip"></div>
-    
+
     <!-- Main JavaScript file -->
     <script src="app.js"></script>
 </body>
+
 </html>

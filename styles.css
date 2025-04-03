@@ -1,10 +1,11 @@
-/* Main Styles for Earthquake Visualization */
-
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f5f5f5;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
 }
 
 .container {
@@ -16,7 +17,8 @@ body {
         "sidebar main"
         "footer footer";
     height: 100vh;
-    width: 100%;
+    width: 100vw;
+    overflow: hidden;
 }
 
 .header {
@@ -25,6 +27,11 @@ body {
     color: white;
     padding: 1rem;
     text-align: center;
+
+    * {
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .sidebar {
@@ -38,7 +45,49 @@ body {
     grid-area: main;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
+
+#toggleable.on {
+    bottom: 0;
+
+    #toggle-charts-button {
+        .toggle-charts-icon {
+            transform: rotate(0deg);
+        }
+    }
+}
+
+#toggleable {
+    position: absolute;
+    bottom: -435px;
+    z-index: 1000;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    transition: 0.3s ease;
+
+    #toggle-charts-button {        
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        position: absolute;
+        left: 50%;
+        top: -33px;
+        height: 30px;
+        background: white;
+        transform: translate(-50%);
+        
+        .toggle-charts-icon {
+            transition: 0.5s ease;
+            transform: rotate(180deg);
+        }
+    }
+}
+
 
 .map-container {
     flex: 1;
@@ -56,6 +105,7 @@ body {
     color: white;
     padding: 0.5rem;
     text-align: center;
+    z-index: 1001;
 }
 
 .control-group {
@@ -120,7 +170,6 @@ button:hover {
 }
 
 .visualization-section {
-    margin-top: 1rem;
     background-color: white;
     border-radius: 4px;
     padding: 1rem;

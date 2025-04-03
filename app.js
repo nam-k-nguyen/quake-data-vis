@@ -16,7 +16,6 @@ let magnitudeSVG = null;
 let depthSVG = null;
 let timelineSVG = null;
 
-
 // Color scales
 const colorScales = {
     magnitude: d3.scaleSequential(d3.interpolateRdYlBu)
@@ -87,7 +86,7 @@ function updateMapLayer(provider) {
 
 // Create legend for map
 function createMapLegend() {
-    const legend = L.control({ position: 'bottomright' });
+    const legend = L.control({ position: 'topright' });
 
     legend.onAdd = function (map) {
         const div = L.DomUtil.create('div', 'legend');
@@ -147,7 +146,7 @@ function updateLegendContent(legendDiv) {
 function loadEarthquakeData() {
 
     // Load data from JSON file
-    fetch('data/earthquakes.json')
+    fetch('data/earthquakes-full.json')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -353,7 +352,7 @@ function hideTooltip() {
 
 // Initialize timeline chart
 function initTimelineChart() {
-    const margin = { top: 10, right: 30, bottom: 30, left: 40 };
+    const margin = { top: 0, right: 30, bottom: 30, left: 40 };
     const width = document.getElementById('timeline').clientWidth - margin.left - margin.right;
     const height = document.getElementById('timeline').clientHeight - margin.top - margin.bottom;
 
@@ -505,8 +504,7 @@ function brushed(event) {
 
 // Initialize magnitude distribution chart
 function initMagnitudeChart() {
-    console.log("initMagnitudeChart")
-    const margin = { top: 10, right: 30, bottom: 30, left: 40 };
+    const margin = { top: 0, right: 30, bottom: 30, left: 40 };
     const width = document.getElementById('magnitude-chart').clientWidth - margin.left - margin.right;
     const height = document.getElementById('magnitude-chart').clientHeight - margin.top - margin.bottom;
 
@@ -641,7 +639,7 @@ function updateMagnitudeChart() {
 
 // Initialize depth distribution chart
 function initDepthChart() {
-    const margin = { top: 10, right: 30, bottom: 30, left: 40 };
+    const margin = { top: 0, right: 30, bottom: 30, left: 40 };
     const width = document.getElementById('depth-chart').clientWidth - margin.left - margin.right;
     const height = document.getElementById('depth-chart').clientHeight - margin.top - margin.bottom;
 
@@ -949,6 +947,10 @@ function setupEventListeners() {
             startAnimation();
         }
     });
+
+    document.getElementById("toggle-charts-button").addEventListener('click', function () {
+        document.getElementById("toggleable").classList.toggle('on');
+    })
 
     // Window resize handler
     window.addEventListener('resize', function () {
