@@ -11,6 +11,7 @@ let depthMin = 0;
 let yearMin = 2014;
 let yearMax = 2025;
 let animation = { active: false, timer: null, index: 0, speed: 50 };
+let zoomLevel = 2;
 
 let magnitudeSVG = null;
 let depthSVG = null;
@@ -286,8 +287,12 @@ function updateMap() {
 
     // Add markers for filtered earthquakes
     filteredEarthquakes.forEach(quake => {
-        const radius = sizeByMagnitude ?
-            Math.pow(2, quake.magnitude) / 2 : 5;
+
+        const radius = (
+            sizeByMagnitude ?
+                Math.pow(2, quake.magnitude + (zoomLevel + 1)) * 0.08:
+                5
+        );
 
         let color;
         if (colorBy === 'magnitude') {
@@ -948,9 +953,19 @@ function setupEventListeners() {
         }
     });
 
+    // Toggle charts
     document.getElementById("toggle-charts-button").addEventListener('click', function () {
         document.getElementById("toggleable").classList.toggle('on');
     })
+
+    // on map zoom
+    map.on('zoomend', function () {
+        const zoom = map.getZoom();
+        if (zoom !== zoomLevel) {
+            zoomLevel = zoom;
+            updateMap();
+        }
+    });
 
     // Window resize handler
     window.addEventListener('resize', function () {
