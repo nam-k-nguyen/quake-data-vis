@@ -290,7 +290,7 @@ function updateMap() {
 
         const radius = (
             sizeByMagnitude ?
-                Math.pow(2, quake.magnitude + (zoomLevel + 1)) * 0.08:
+                Math.pow(2, quake.magnitude + (zoomLevel + 1)) * 0.05:
                 5
         );
 
