@@ -201,6 +201,8 @@ The application follows a modular structure:
 
 **Demo**
 
+![https://github.com/nam-k-nguyen/quake-data-vis/blob/main/quake-data-vis-demo-video.mp4](https://github.com/nam-k-nguyen/quake-data-vis/blob/main/quake-data-vis-demo-video.mp4)
+
 <video width="320" height="240" controls>
 <source src="quake-data-vis-demo-video.mp4" type="video/mp4">
 </video>
