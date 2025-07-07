@@ -1,14 +1,13 @@
 class TimeHistogram {
     constructor(data, config = {}) {
         this.data = data;
-        console.log(this.data.length, "data length");
         this.config = {
             parentElement: config.parentElement || "#time-histogram-container",
             containerWidth: config.containerWidth || 400,
             containerHeight: config.containerHeight || 200,
             xAxisSpacing: config.xAxisSpacing || 10,
             yAxisSpacing: config.yAxisSpacing || 40,
-            margin: config.margin || { top: 25, right: 20, bottom: 15, left: 20 },
+            margin: config.margin || { top: 25, right: 20, bottom: 25, left: 20 },
         };
 
         this.selectionChangeListener = [(minDate, maxDate) => {
@@ -92,8 +91,23 @@ class TimeHistogram {
             .attr("transform", `translate(${(margin.left + yAxisSpacing) / 2}, ${margin.top - 10})`)
             .text("Quakes");
 
-        vis.xAxis.call(d3.axisBottom(vis.xScale).ticks(d3.utcMonth.every(1)));
+        // x axis text should rotate 45 degrees
+        vis.xAxis.call(
+            d3.axisBottom(vis.xScale)
+                .ticks(d3.utcMonth.every(1))
+                .tickFormat(d => {
+                    return d.getUTCMonth() === 0 ? d3.utcFormat("%Y")(d) : d3.utcFormat("%b")(d);
+                })
+        );
         vis.yAxis.call(d3.axisLeft(vis.yScale).ticks(4));
+
+        vis.xAxis.selectAll("text")
+            .attr("transform", "rotate(45)")
+            .style("text-anchor", "start")
+            .style("font-weight", function (d) {
+                return d.getUTCMonth && d.getUTCMonth() === 0 ? "bold" : "normal";
+            });
+
     }
 
     defineBrush() {
@@ -108,6 +122,8 @@ class TimeHistogram {
                 const [x0, x1] = event.selection;
                 let minTime = vis.xScale.invert(x0);
                 let maxTime = vis.xScale.invert(x1);
+
+
                 vis.selectionChangeListener.forEach(listener => listener(minTime, maxTime));
             }
         }
@@ -180,10 +196,10 @@ class TimeHistogram {
         const vis = this;
         vis.selectionChangeListener = [];
         listeners.forEach(listener => {
-            if (typeof listener === 'function' && listener.length === 2) {
+            if (typeof listener === 'function') {
                 vis.selectionChangeListener.push(listener);
             } else {
-                console.error("Listener must be a function with two parameters: minDate and maxDate");
+                console.error("Listener must be a function");
             }
         });
     }
