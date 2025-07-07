@@ -146,7 +146,7 @@ class PieChart {
         d3.select(legendParent).selectAll("*").remove();
 
         
-        d3.select(legendParent).style("grid-template-rows", `repeat(${vis.groupingsData.length / 2}, 1fr)`)
+        d3.select(legendParent).style("grid-template-rows", `repeat(${Math.floor(vis.groupingsData.length / 2)}, 1fr)`)
 
         
         vis.legend = d3.select(legendParent)

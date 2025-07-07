@@ -1,16 +1,14 @@
 async function fetchData() {
-    const response = await fetch("data/2025_filtered.json");
+    const response = await fetch("data/2020-2024_filtered.json");
     const data = await response.json();
     return data;
 }
 
 async function main() {
     const data = await fetchData();
+    console.log("Data loaded:", data.length, "records");
 
     const mapVis = new MapVisualization(data);
-
-
-
 
     const pieContainerId = "#magnitude-pie-chart-container";
     const pieLegendParent = "#magnitude-pie-chart-legend";
@@ -22,9 +20,6 @@ async function main() {
         containerHeight: heightPie,
     });
 
-
-
-
     const histContainerId = "#time-histogram-container";
     const { width: widthHist, height: heightHist } = util.getDimensionsOfElement(histContainerId);
     const timeHist = new TimeHistogram(data, {
@@ -34,8 +29,8 @@ async function main() {
     });
 
     timeHist.updateSelectionChangeListeners([
-        mapVis.updatePointWhenDateRangeChange.bind(mapVis),
-        magPieChart.updatePointWhenDateRangeChange.bind(magPieChart),
+        util.debounce(mapVis.updatePointWhenDateRangeChange.bind(mapVis), 200),
+        util.debounce(magPieChart.updatePointWhenDateRangeChange.bind(magPieChart), 200),
     ])
 
     // event listeners 
