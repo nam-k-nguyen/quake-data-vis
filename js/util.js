@@ -36,10 +36,19 @@ const getMapStyleGeojson = (style) => {
     return `https://basemaps.cartocdn.com/gl/${style}-gl-style/style.json`;
 }
 
+const debounce = (func, delay) => {
+    let timeoutId;
+    return function(...args) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(this, args), delay);
+    };
+};
+
 const util = {
     rgbStringToArray,
     dataToLngLatArr,
     dateInRange,
+    debounce,
     getDimensionsOfElement,
     getMapStyleGeojson
 }
